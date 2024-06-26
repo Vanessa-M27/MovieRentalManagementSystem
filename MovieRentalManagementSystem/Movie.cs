@@ -9,7 +9,7 @@ namespace MRMS_Model
         public int Code;
         public string Title;
         public string Genre;
-        public int Year;
+        public string Year;
         public double Price;
         public bool IsRented { get; set; }
 
