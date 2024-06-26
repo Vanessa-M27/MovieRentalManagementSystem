@@ -1,5 +1,6 @@
 ﻿using MRMS_Data;
 using MRMS_Model;
+using System.Data.SqlClient;
 
 
 namespace MRMS_BusinessService
@@ -45,7 +46,11 @@ namespace MRMS_BusinessService
         {
             return movieData.GetMovies();
         }
-       
+
+        public int AddMovie(int code, string title, string genre, string year, double price)
+        {
+            return movieData.AddMovie(code, title, genre, year, price);
+        }
 
 
     }

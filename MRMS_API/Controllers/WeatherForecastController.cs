@@ -9,31 +9,36 @@ namespace MRMS_API.Controllers
     [Route("[controller]")]
     public class OwnerAPIController : ControllerBase
     {
-        private readonly CustomerGetService _customergetservice;
-        private readonly MovieService _movieservice;
+        private readonly CustomerGetService _customerGetService;
+        private readonly MovieService _movieService;
 
-        public OwnerAPIController(CustomerGetService customergetservice, MovieService movieservice)
+        public OwnerAPIController(CustomerGetService customerGetService, MovieService movieService)
         {
-            _customergetservice = customergetservice;
-            _movieservice = movieservice;
+            _customerGetService = customerGetService;
+            _movieService = movieService;
         }
 
         [HttpGet("Customers")]
         public IEnumerable<Customer> GetAllCustomers()
         {
-            return _customergetservice.GetAllCustomers();
+            return _customerGetService.GetAllCustomers();
         }
 
-        [HttpGet("MOVIES")]
-        public IEnumerable<Movie> GetMovies()
+        [HttpGet("Movies")]
+        public ActionResult<IEnumerable<Movie>> GetMovies()
         {
-            return _movieservice.GetMovies();
+            var movies = _movieService.GetMovies();
+            if (movies == null || !movies.Any())
+            {
+                return NotFound("No movies found.");
+            }
+            return Ok(movies);
         }
 
-        [HttpPost("login")]
-        public ActionResult<CustomerProfile> Login([FromBody] CustomerProfile customerprofile)
+        [HttpPost("Login")]
+        public ActionResult<Customer> Login([FromBody] Customer customer)
         {
-            var user = _customergetservice.GetCustomer(customerprofile.ProfileName, customerprofile.EmailAddress);
+            var user = _customerGetService.GetCustomer(customer.Username, customer.Password);
             if (user != null)
             {
                 return Ok(user);
@@ -41,19 +46,37 @@ namespace MRMS_API.Controllers
             return Unauthorized();
         }
 
-        [HttpPost("InsertMovies")]
+        [HttpPost("AddMovie")]
         public ActionResult<int> AddMovie([FromBody] Movie movie)
         {
-            var result = _movieservice.GetMovies();
+            if (movie == null)
+            {
+                return BadRequest("Movie data is null.");
+            }
+
+            var result = _movieService.AddMovie(movie.Code, movie.Title, movie.Genre, movie.Year, movie.Price);
             return Ok(result);
         }
 
-        
+        [HttpPost("RentMovie")]
+        public ActionResult<string> RentMovie([FromBody] RentMovieRequest request)
+        {
+            if (request == null || request.MovieCode == 0 || request.Customer == null)
+            {
+                return BadRequest("Invalid rental request.");
+            }
+
+            var result = _movieService.RentMovie(request.MovieCode, request.Customer);
+            return Ok(result);
+        }
+
+
     }
+ } 
 
 
 
 
 
-}
+
 

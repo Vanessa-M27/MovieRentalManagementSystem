@@ -18,7 +18,7 @@ namespace MRMS_Data
 
         public List<Movie> GetMovies()
         {
-            string selectStatement = "SELECT Code, Title, Genre, Year, Price FROM Movies";
+            string selectStatement = "SELECT Code, Title, Genre, Year, Price, IsRented FROM Movies";
             SqlCommand selectCommand = new SqlCommand(selectStatement, sqlConnection);
             sqlConnection.Open();
             List<Movie> movies = new List<Movie>();
@@ -34,7 +34,7 @@ namespace MRMS_Data
                     Genre = reader["Genre"].ToString(),
                     Year = reader["Year"].ToString(),
                     Price = Convert.ToDouble(reader["Price"]),
-                    
+                    IsRented = Convert.ToBoolean(reader["IsRented"])
                 };
 
                 movies.Add(movie);
@@ -63,6 +63,21 @@ namespace MRMS_Data
             sqlConnection.Close();
 
             return success;
+        }
+
+        public int UpdateMovie(Movie movie)
+        {
+            string updateStatement = "UPDATE Movies SET IsRented = @IsRented WHERE Code = @Code";
+            SqlCommand updateCommand = new SqlCommand(updateStatement, sqlConnection);
+
+            updateCommand.Parameters.AddWithValue("@IsRented", movie.IsRented);
+            updateCommand.Parameters.AddWithValue("@Code", movie.Code);
+
+            sqlConnection.Open();
+            int rowsAffected = updateCommand.ExecuteNonQuery();
+            sqlConnection.Close();
+
+            return rowsAffected;
         }
 
     }
