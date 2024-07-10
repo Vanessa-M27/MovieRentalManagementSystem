@@ -13,6 +13,7 @@ namespace MRMS_Data
         string connectionString = "Data Source=LAPTOP-LGBEJ5GN\\SQLEXPRESS02; Initial Catalog=MoiveRentalManagmentSystem; Integrated Security=True;";
         SqlConnection sqlConnection;
 
+       
         public SqlCustomerdbData()
         {
             sqlConnection = new SqlConnection(connectionString);

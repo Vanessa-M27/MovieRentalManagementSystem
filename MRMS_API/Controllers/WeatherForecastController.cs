@@ -3,6 +3,8 @@ using MRMS_Model;
 using MRMS_Data;
 using MRMS_BusinessService;
 using MRMS_UI;
+using System.Collections.Generic;
+
 namespace MRMS_API.Controllers
 {
     [ApiController]
@@ -25,7 +27,7 @@ namespace MRMS_API.Controllers
         }
 
         [HttpGet("Movies")]
-        public ActionResult<IEnumerable<Movie>> GetMovies()
+        public ActionResult<IEnumerable<Movie>> GetAllMovies()
         {
             var movies = _movieService.GetMovies();
             if (movies == null || !movies.Any())
@@ -72,7 +74,7 @@ namespace MRMS_API.Controllers
 
 
     }
- } 
+}
 
 
 
