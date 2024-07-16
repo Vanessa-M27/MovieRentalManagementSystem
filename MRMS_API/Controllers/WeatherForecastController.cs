@@ -4,6 +4,8 @@ using MRMS_Data;
 using MRMS_BusinessService;
 using MRMS_UI;
 using System.Collections.Generic;
+using System.Linq;
+using Microsoft.AspNetCore.Mvc.ViewEngines;
 
 namespace MRMS_API.Controllers
 {
@@ -24,39 +26,41 @@ namespace MRMS_API.Controllers
         public IEnumerable<Customer> GetAllCustomers()
         {
             return _customerGetService.GetAllCustomers();
+
+           
         }
 
         [HttpGet("Movies")]
-        public ActionResult<IEnumerable<Movie>> GetAllMovies()
+        public IEnumerable<Movie> GetAllMovies()
         {
-            var movies = _movieService.GetMovies();
-            if (movies == null || !movies.Any())
+            return _movieService.GetMovies();
+            List <Movie> movies = new List <Movie>();
+            foreach (var movi in movies)
             {
-                return NotFound("No movies found.");
+                movies.Add(movi);
             }
-            return Ok(movies);
         }
 
         [HttpPost("Login")]
-        public ActionResult<Customer> Login([FromBody] Customer customer)
+        public ActionResult<Customer> Login([FromBody] CustomerAPI customer)
         {
             var user = _customerGetService.GetCustomer(customer.Username, customer.Password);
             if (user != null)
             {
-                return Ok(user);
+                return Ok("Successfuly Log in");
             }
             return Unauthorized();
         }
 
         [HttpPost("AddMovie")]
-        public ActionResult<int> AddMovie([FromBody] Movie movie)
+        public ActionResult<int> AddMovie([FromBody] MovieAPI newMovie)
         {
-            if (movie == null)
+            if (newMovie == null)
             {
-                return BadRequest("Movie data is null.");
+                return BadRequest("Movie data is null");
             }
 
-            var result = _movieService.AddMovie(movie.Code, movie.Title, movie.Genre, movie.Year, movie.Price);
+            var result = _movieService.AddMovie(newMovie.Code, newMovie.Title, newMovie.Genre, newMovie.Year, newMovie.Price);
             return Ok(result);
         }
 
@@ -72,13 +76,11 @@ namespace MRMS_API.Controllers
             return Ok(result);
         }
 
-
+        [HttpDelete("RemoveMovie")]
+        public ActionResult<int> RemoveMovie([FromBody] string title)
+        {
+            var result = _movieService.RemoveMovie(title);
+            return Ok(result);
+        }
     }
 }
-
-
-
-
-
-
-

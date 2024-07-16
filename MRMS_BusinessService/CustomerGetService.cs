@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace MRMS_BusinessService
 {
-   public class CustomerGetService
+    public class CustomerGetService
     {
         private SqlCustomerdbData customerData;
 
@@ -68,9 +68,10 @@ namespace MRMS_BusinessService
             return customerData.AddCustomer(customer.Username, customer.Password);
         }
 
-       
+
 
 
 
     }
+
 }

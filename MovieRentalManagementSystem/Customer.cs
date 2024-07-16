@@ -10,11 +10,8 @@ namespace MRMS_Model
     {
         public string Username;
         public string Password;
-        public DateTime DateVerified;
-        public DateTime DateCreated = DateTime.Now;
-        public DateTime DateUpdated;
-        public CustomerProfile Profile;
         public int Status;
 
     }
+
 }

@@ -9,4 +9,5 @@ namespace MRMS_API
         public double Price { get; set; }
         public bool IsRented { get; set; }
     }
+
 }

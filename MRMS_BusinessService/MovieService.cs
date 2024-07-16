@@ -1,6 +1,7 @@
 ﻿using MRMS_Data;
 using MRMS_Model;
 using System.Data.SqlClient;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 
 namespace MRMS_BusinessService
@@ -9,7 +10,7 @@ namespace MRMS_BusinessService
     {
         private MovieData movieData;
 
-       public MovieService()
+        public MovieService()
         {
             movieData = new MovieData();
         }
@@ -53,8 +54,11 @@ namespace MRMS_BusinessService
 
         }
 
-
-
+        public int RemoveMovie(string title)
+        {
+            return movieData.RemoveMovie(title);
+        }
 
     }
+
 }

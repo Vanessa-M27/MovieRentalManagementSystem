@@ -1,18 +1,20 @@
 ﻿
 using MRMS_Model;
 using System.Data.SqlClient;
+using System.Diagnostics;
 
 
 namespace MRMS_Data
 {
-   public class MovieData
-      {
+    public class MovieData
+    {
 
-        private string connectionString = "Data Source=LAPTOP-LGBEJ5GN\\SQLEXPRESS02; Initial Catalog=Movies; Integrated Security=True;";
+        private string connectionString = "Data Source=LAPTOP-LGBEJ5GN\\SQLEXPRESS02; Initial Catalog=MoiveRentalManagmentSystem; Integrated Security=True;";
         private SqlConnection sqlConnection;
-
+        
         public MovieData()
         {
+
             sqlConnection = new SqlConnection(connectionString);
         }
 
@@ -79,6 +81,22 @@ namespace MRMS_Data
 
             return rowsAffected;
         }
+
+        public int RemoveMovie(string title)
+        {
+            string remove = "DELETE FROM Movies WHERE Title = @title";
+            SqlCommand removemovie = new SqlCommand(remove, sqlConnection);
+            removemovie.Parameters.AddWithValue("@title", title);
+
+            sqlConnection.Open();
+
+            int movie = removemovie.ExecuteNonQuery();
+
+            sqlConnection.Close();
+
+            return movie;
+        }
+
 
     }
 }
