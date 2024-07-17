@@ -15,10 +15,9 @@ namespace MRMS_BusinessService
             movieData = new MovieData();
         }
 
-        public string RentMovie(int movieCode, Customer currentCustomer)
+        public string RentMovie(int movieCode)
         {
             List<Movie> movies = movieData.GetMovies();
-
             Movie movieToRent = movies.Find(movie => movie.Code == movieCode);
 
             if (movieToRent != null)
@@ -27,10 +26,18 @@ namespace MRMS_BusinessService
                 {
                     double rentalFee = movieToRent.Price;
                     movieToRent.IsRented = true;
-                    // Update the movie's rented status in the database here
-                    // movieData.UpdateMovie(movieToRent);
 
-                    return $"Movie '{movieToRent.Title}' has been rented by {currentCustomer.Username}. Enjoy your movie! Rental Fee: Php{rentalFee}";
+                    // Update the movie's rented status in the database
+                    int rowsAffected = movieData.UpdateMovie(movieToRent);
+
+                    if (rowsAffected > 0)
+                    {
+                        return $"Movie '{movieToRent.Title}' is successfully rented. Enjoy your movie! Rental Fee: Php{rentalFee}";
+                    }
+                    else
+                    {
+                        return "Movie rental failed due to a database update error.";
+                    }
                 }
                 else
                 {
@@ -48,11 +55,14 @@ namespace MRMS_BusinessService
             return movieData.GetMovies();
         }
 
+
         public int AddMovie(int code, string title, string genre, string year, double price)
         {
             return movieData.AddMovie(code, title, genre, year, price);
 
         }
+
+        
 
         public int RemoveMovie(string title)
         {

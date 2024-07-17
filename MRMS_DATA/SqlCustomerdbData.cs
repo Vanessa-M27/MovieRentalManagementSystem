@@ -30,15 +30,15 @@ namespace MRMS_Data
 
             while (reader.Read())
             {
-                string username = reader["username"].ToString();
-                string password = reader["password"].ToString();
-                int status = Convert.ToInt32(reader["status"]);
+                string username = reader["Username"].ToString();
+                string password = reader["Password"].ToString();
+               
 
                 Customer readCustomer = new Customer
                 {
                     Username = username,
                     Password = password,
-                    Status = status
+                    
                 };
 
                 customers.Add(readCustomer);
@@ -53,12 +53,12 @@ namespace MRMS_Data
         {
             int success;
 
-            string insertStatement = "INSERT INTO Customer (username, password, status) VALUES (@Username, @Password, @Status)";
+            string insertStatement = "INSERT INTO Customer (Username, Password) VALUES (@Username, @Password)";
             SqlCommand insertCommand = new SqlCommand(insertStatement, sqlConnection);
 
             insertCommand.Parameters.AddWithValue("@Username", username);
             insertCommand.Parameters.AddWithValue("@Password", password);
-            insertCommand.Parameters.AddWithValue("@Status", 1);
+           
 
             sqlConnection.Open();
             success = insertCommand.ExecuteNonQuery();
@@ -67,38 +67,8 @@ namespace MRMS_Data
             return success;
         }
 
-        public int UpdateCustomer(string username, string password)
-        {
-            int success;
+       
 
-            string updateStatement = "UPDATE customer SET password = @Password WHERE username = @Username";
-            SqlCommand updateCommand = new SqlCommand(updateStatement, sqlConnection);
-
-            updateCommand.Parameters.AddWithValue("@Password", password);
-            updateCommand.Parameters.AddWithValue("@Username", username);
-
-            sqlConnection.Open();
-            success = updateCommand.ExecuteNonQuery();
-            sqlConnection.Close();
-
-            return success;
-        }
-
-        public int DeleteCustomer(string username)
-        {
-            int success;
-
-            string deleteStatement = "DELETE FROM customer WHERE username = @Username";
-            SqlCommand deleteCommand = new SqlCommand(deleteStatement, sqlConnection);
-
-            deleteCommand.Parameters.AddWithValue("@Username", username);
-
-            sqlConnection.Open();
-            success = deleteCommand.ExecuteNonQuery();
-            sqlConnection.Close();
-
-            return success;
-        }
 
 
     }

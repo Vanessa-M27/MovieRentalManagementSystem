@@ -4,7 +4,7 @@ namespace MRMS_API
 {
     public class RentMovieRequest
     {
-        public Customer Customer { get; set; }
+        public Customer Username { get; set; }
         public int MovieCode { get; set; }
     }
 }

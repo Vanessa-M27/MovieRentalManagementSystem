@@ -36,7 +36,7 @@ namespace MRMS_UI
             {
                 Console.WriteLine($"Username: {item.Username}");
                 Console.WriteLine($"Password: {item.Password}");
-                Console.WriteLine($"Password: {item.Status}");
+              
 
                 Console.WriteLine();
             }

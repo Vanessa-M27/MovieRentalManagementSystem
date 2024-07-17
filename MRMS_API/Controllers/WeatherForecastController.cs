@@ -23,26 +23,34 @@ namespace MRMS_API.Controllers
         }
 
         [HttpGet("Customers")]
-        public IEnumerable<Customer> GetAllCustomers()
+        public IEnumerable<CustomerAPI> GetAllCustomers()
         {
-            return _customerGetService.GetAllCustomers();
+            var custo = _customerGetService.GetAllCustomers();
+            List <CustomerAPI> cus = new List<CustomerAPI>();
+            foreach (var cust in custo)
+            {
 
+                cus.Add(new CustomerAPI { Username = cust.Username, Password = cust.Password});
+            }
+            return cus;
            
         }
 
         [HttpGet("Movies")]
-        public IEnumerable<Movie> GetAllMovies()
+        public IEnumerable<MovieAPI> GetAllMovies()
         {
-            return _movieService.GetMovies();
-            List <Movie> movies = new List <Movie>();
+            var movies = _movieService.GetMovies();
+            List<MovieAPI> mov = new List<MovieAPI>();
+
             foreach (var movi in movies)
             {
-                movies.Add(movi);
+                mov.Add(new MovieAPI { Code = movi.Code, Genre = movi.Genre, Title = movi.Title, Year = movi.Year, Price = movi.Price, IsRented = movi.IsRented });
             }
+            return mov;
         }
 
         [HttpPost("Login")]
-        public ActionResult<Customer> Login([FromBody] CustomerAPI customer)
+        public ActionResult<Customer> Login(CustomerAPI customer)
         {
             var user = _customerGetService.GetCustomer(customer.Username, customer.Password);
             if (user != null)
@@ -53,7 +61,7 @@ namespace MRMS_API.Controllers
         }
 
         [HttpPost("AddMovie")]
-        public ActionResult<int> AddMovie([FromBody] MovieAPI newMovie)
+        public ActionResult<int> AddMovie( MovieAPI newMovie)
         {
             if (newMovie == null)
             {
@@ -61,26 +69,56 @@ namespace MRMS_API.Controllers
             }
 
             var result = _movieService.AddMovie(newMovie.Code, newMovie.Title, newMovie.Genre, newMovie.Year, newMovie.Price);
-            return Ok(result);
+            return Ok("Successfully Added");
         }
 
-        [HttpPost("RentMovie")]
-        public ActionResult<string> RentMovie([FromBody] RentMovieRequest request)
+        [HttpPost("AddCustomer")]
+        public ActionResult<int> AddCustomer(CustomerAPI newCustomer)
         {
-            if (request == null || request.MovieCode == 0 || request.Customer == null)
+            if (newCustomer == null)
+            {
+                return BadRequest("Customer Data is null");
+            }
+
+            var result = _customerGetService.AddCustomer(newCustomer.Username, newCustomer.Password);
+            return Ok("Successfully Added");
+        }
+
+        [HttpPatch("RentMovie")]
+        public ActionResult<string> RentMovie( int MovieCode)
+        {
+            if ( MovieCode == 0  )
             {
                 return BadRequest("Invalid rental request.");
             }
 
-            var result = _movieService.RentMovie(request.MovieCode, request.Customer);
-            return Ok(result);
+            var result = _movieService.RentMovie(MovieCode);
+
+            if (result.StartsWith("Movie"))
+            {
+                return Ok(result);
+            }
+            else if (result.Contains("already rented"))
+            {
+                return Conflict(result); // HTTP 409 Conflict for already rented movies
+            }
+            else if (result.Contains("does not exist"))
+            {
+                return NotFound(result); // HTTP 404 Not Found for non-existent movies
+            }
+            else
+            {
+                return BadRequest("Movie rental failed.");
+            }
         }
 
         [HttpDelete("RemoveMovie")]
-        public ActionResult<int> RemoveMovie([FromBody] string title)
+        public ActionResult<int> RemoveMovie( string title)
         {
             var result = _movieService.RemoveMovie(title);
             return Ok(result);
         }
+
+
     }
 }

@@ -10,8 +10,7 @@ namespace MRMS_Model
     {
         public string Username;
         public string Password;
-        public int Status;
-
+     
     }
 
 }

@@ -22,20 +22,7 @@ namespace MRMS_BusinessService
             return customerData.GetCustomers();
         }
 
-        public List<Customer> GetCustomersByStatus(int customerStatus)
-        {
-            List<Customer> customersByStatus = new List<Customer>();
-
-            foreach (var customer in GetAllCustomers())
-            {
-                if (customer.Status == customerStatus)
-                {
-                    customersByStatus.Add(customer);
-                }
-            }
-
-            return customersByStatus;
-        }
+       
 
         public Customer GetCustomer(string username, string password)
         {
@@ -50,24 +37,11 @@ namespace MRMS_BusinessService
             return null;
         }
 
-        public Customer GetCustomer(string username)
+        public int AddCustomer(string Username, string Password)
         {
-            foreach (var customer in GetAllCustomers())
-            {
-                if (customer.Username == username)
-                {
-                    return customer;
-                }
-            }
-
-            return null;
+            return customerData.AddCustomer(Username, Password);
         }
-
-        public int AddCustomer(Customer customer)
-        {
-            return customerData.AddCustomer(customer.Username, customer.Password);
-        }
-
+     
 
 
 

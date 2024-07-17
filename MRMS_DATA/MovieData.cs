@@ -70,18 +70,20 @@ namespace MRMS_Data
         public int UpdateMovie(Movie movie)
         {
             string updateStatement = "UPDATE Movies SET IsRented = @IsRented WHERE Code = @Code";
-            SqlCommand updateCommand = new SqlCommand(updateStatement, sqlConnection);
+            using (SqlConnection sqlConnection = new SqlConnection(connectionString))
+            {
+                SqlCommand updateCommand = new SqlCommand(updateStatement, sqlConnection);
 
-            updateCommand.Parameters.AddWithValue("@IsRented", movie.IsRented);
-            updateCommand.Parameters.AddWithValue("@Code", movie.Code);
+                updateCommand.Parameters.AddWithValue("@IsRented", movie.IsRented);
+                updateCommand.Parameters.AddWithValue("@Code", movie.Code);
 
-            sqlConnection.Open();
-            int rowsAffected = updateCommand.ExecuteNonQuery();
-            sqlConnection.Close();
+                sqlConnection.Open();
+                int rowsAffected = updateCommand.ExecuteNonQuery();
+                sqlConnection.Close();
 
-            return rowsAffected;
+                return rowsAffected;
+            }
         }
-
         public int RemoveMovie(string title)
         {
             string remove = "DELETE FROM Movies WHERE Title = @title";
