@@ -10,13 +10,14 @@ namespace MRMS_Data
 {
     public class SqlCustomerdbData
     {
-        string connectionString = "Data Source=LAPTOP-LGBEJ5GN\\SQLEXPRESS02; Initial Catalog=MoiveRentalManagmentSystem; Integrated Security=True;";
+        //string connectionString = "Data Source=LAPTOP-LGBEJ5GN\\SQLEXPRESS02; Initial Catalog=MoiveRentalManagmentSystem; Integrated Security=True;";
+        string connection = "Server = tcp:40.81.22.197,1433;Database=MoiveRentalManagmentSystem; User Id=sa; Password=VV1234v;";
         SqlConnection sqlConnection;
 
 
         public SqlCustomerdbData()
         {
-            sqlConnection = new SqlConnection(connectionString);
+            sqlConnection = new SqlConnection(connection);
         }
 
         public List<Customer> GetCustomers()
