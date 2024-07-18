@@ -50,6 +50,7 @@ namespace MRMS_BusinessService
             }
         }
 
+
         public List<Movie> GetMovies()
         {
             return movieData.GetMovies();

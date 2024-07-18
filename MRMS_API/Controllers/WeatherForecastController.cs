@@ -110,7 +110,10 @@ namespace MRMS_API.Controllers
             {
                 return BadRequest("Movie rental failed.");
             }
+
+
         }
+
 
         [HttpDelete("RemoveMovie")]
         public ActionResult<int> RemoveMovie( string title)
