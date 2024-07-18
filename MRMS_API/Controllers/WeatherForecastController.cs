@@ -68,7 +68,7 @@ namespace MRMS_API.Controllers
                 return BadRequest("Movie data is null");
             }
 
-            var result = _movieService.AddMovie(newMovie.Code, newMovie.Title, newMovie.Genre, newMovie.Year, newMovie.Price);
+            var result = _movieService.AddMovie(newMovie.Code, newMovie.Title, newMovie.Genre, newMovie.Year, newMovie.Price, newMovie.IsRented);
             return Ok("Successfully Added");
         }
 

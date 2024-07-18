@@ -57,9 +57,9 @@ namespace MRMS_BusinessService
         }
 
 
-        public int AddMovie(int code, string title, string genre, string year, double price)
+        public int AddMovie(int code, string title, string genre, string year, double price, bool IsRented)
         {
-            return movieData.AddMovie(code, title, genre, year, price);
+            return movieData.AddMovie(code, title, genre, year, price, IsRented);
 
         }
 
