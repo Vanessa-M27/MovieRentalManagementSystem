@@ -22,7 +22,7 @@ namespace MRMS_Data
 
         public List<Customer> GetCustomers()
         {
-            string selectStatement = "SELECT * FROM Customer";
+            string selectStatement = "SELECT * FROM Customers";
             SqlCommand selectCommand = new SqlCommand(selectStatement, sqlConnection);
             sqlConnection.Open();
             List<Customer> customers = new List<Customer>();
@@ -54,7 +54,7 @@ namespace MRMS_Data
         {
             int success;
 
-            string insertStatement = "INSERT INTO Customer (Username, Password) VALUES (@Username, @Password)";
+            string insertStatement = "INSERT INTO Customers (Username, Password) VALUES (@Username, @Password)";
             SqlCommand insertCommand = new SqlCommand(insertStatement, sqlConnection);
 
             insertCommand.Parameters.AddWithValue("@Username", username);
