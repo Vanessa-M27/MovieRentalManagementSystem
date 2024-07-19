@@ -23,7 +23,7 @@ namespace MRMS_UI
                 Console.WriteLine($"Genre: {item.Genre}");
                 Console.WriteLine($"Year: {item.Year}");
                 Console.WriteLine($"Price: {item.Price}");
-
+                Console.WriteLine($"IsRented: {item.IsRented}");
                 Console.WriteLine();
             }
 
