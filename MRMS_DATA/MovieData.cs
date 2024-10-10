@@ -9,14 +9,14 @@ namespace MRMS_Data
     public class MovieData
     {
 
-     //   private string connectionString = "Data Source=LAPTOP-LGBEJ5GN\\SQLEXPRESS02; Initial Catalog=MoiveRentalManagmentSystem; Integrated Security=True;";
-        string connection = "Server = tcp:40.81.22.197,1433;Database=MoiveRentalManagmentSystem; User Id=sa; Password=VV1234v;";
+      private string connectionString = "Data Source=LAPTOP-LGBEJ5GN\\SQLEXPRESS02; Initial Catalog=MoiveRentalManagmentSystem; Integrated Security=True;";
+        //string connection = "Server = tcp:40.81.22.197,1433;Database=MoiveRentalManagmentSystem; User Id=sa; Password=VV1234v;";
          SqlConnection sqlConnection;
         
         public MovieData()
         {
 
-            sqlConnection = new SqlConnection(connection);
+            sqlConnection = new SqlConnection(connectionString);
         }
 
         public List<Movie> GetMovies()
@@ -71,7 +71,7 @@ namespace MRMS_Data
         public int UpdateMovie(Movie movie)
         {
             string updateStatement = "UPDATE Movies SET IsRented = @IsRented WHERE Code = @Code";
-            using (SqlConnection sqlConnection = new SqlConnection(connection))
+            using (SqlConnection sqlConnection = new SqlConnection(connectionString))
             {
                 SqlCommand updateCommand = new SqlCommand(updateStatement, sqlConnection);
 

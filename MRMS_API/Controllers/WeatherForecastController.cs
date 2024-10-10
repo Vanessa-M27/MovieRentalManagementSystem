@@ -15,25 +15,28 @@ namespace MRMS_API.Controllers
     {
         private readonly CustomerGetService _customerGetService;
         private readonly MovieService _movieService;
+        private readonly Email _email;
 
-        public OwnerAPIController(CustomerGetService customerGetService, MovieService movieService)
+        public OwnerAPIController(CustomerGetService customerGetService, MovieService movieService, Email email)
         {
             _customerGetService = customerGetService;
             _movieService = movieService;
+            _email = email;
+
         }
 
         [HttpGet("Customers")]
         public IEnumerable<CustomerAPI> GetAllCustomers()
         {
             var custo = _customerGetService.GetAllCustomers();
-            List <CustomerAPI> cus = new List<CustomerAPI>();
+            List<CustomerAPI> cus = new List<CustomerAPI>();
             foreach (var cust in custo)
             {
 
-                cus.Add(new CustomerAPI { Username = cust.Username, Password = cust.Password});
+                cus.Add(new CustomerAPI { Username = cust.Username, Password = cust.Password });
             }
             return cus;
-           
+
         }
 
         [HttpGet("Movies")]
@@ -61,7 +64,7 @@ namespace MRMS_API.Controllers
         }
 
         [HttpPost("AddMovie")]
-        public ActionResult<int> AddMovie( MovieAPI newMovie)
+        public ActionResult<int> AddMovie(MovieAPI newMovie)
         {
             if (newMovie == null)
             {
@@ -73,56 +76,89 @@ namespace MRMS_API.Controllers
         }
 
         [HttpPost("AddCustomer")]
-        public ActionResult<int> AddCustomer(CustomerAPI newCustomer)
+        public ActionResult<string> AddCustomer(CustomerAPI newCustomer)
         {
             if (newCustomer == null)
             {
-                return BadRequest("Customer Data is null");
+                return BadRequest("Customer data is null");
             }
 
             var result = _customerGetService.AddCustomer(newCustomer.Username, newCustomer.Password);
-            return Ok("Successfully Added");
+
+            if (result > 0) // Customer added successfully
+            {
+                // Call the email service to send the notification
+                try
+                {
+                    _email.SendCustomerWelcomeEmail(newCustomer.Username); 
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"Failed to send email: {ex.Message}");
+                    return Ok("Customer added, but email notification failed.");
+                }
+
+                return Ok("Customer successfully added, and email notification sent.");
+            }
+
+          
+            return StatusCode(500, "Error adding customer.");
         }
 
+
         [HttpPatch("RentMovie")]
-        public ActionResult<string> RentMovie( int MovieCode)
+        public ActionResult<string> RentMovie(int MovieCode, string customerEmail)
         {
-            if ( MovieCode == 0  )
+            if (MovieCode == 0)
             {
                 return BadRequest("Invalid rental request.");
             }
 
             var result = _movieService.RentMovie(MovieCode);
 
-            if (result.StartsWith("Movie"))
+            if (result.StartsWith("Movie")) // Movie rented successfully
             {
-                return Ok(result);
+                // Send notification email to the customer
+                try
+                {
+                    _email.SendRentalNotification(customerEmail, MovieCode); 
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"Failed to send email: {ex.Message}");
+                    return Ok("Movie rented, but email notification failed.");
+                }
+
+                return Ok("Movie successfully rented, and email notification sent.");
             }
             else if (result.Contains("already rented"))
             {
-                return Conflict(result); // HTTP 409 Conflict for already rented movies
+                return Conflict(result); 
             }
             else if (result.Contains("does not exist"))
             {
-                return NotFound(result); // HTTP 404 Not Found for non-existent movies
+                return NotFound(result); 
             }
             else
             {
                 return BadRequest("Movie rental failed.");
             }
-
-
         }
 
 
         [HttpDelete("RemoveMovie")]
-        public ActionResult<int> RemoveMovie( string title)
+        public ActionResult<int> RemoveMovie(string title)
         {
             var result = _movieService.RemoveMovie(title);
             return Ok(result);
         }
 
-
-
+        
+  
+    
+    
     }
+
+
+    
 }

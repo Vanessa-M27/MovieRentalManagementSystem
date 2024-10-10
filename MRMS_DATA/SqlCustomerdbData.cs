@@ -10,19 +10,19 @@ namespace MRMS_Data
 {
     public class SqlCustomerdbData
     {
-        //string connectionString = "Data Source=LAPTOP-LGBEJ5GN\\SQLEXPRESS02; Initial Catalog=MoiveRentalManagmentSystem; Integrated Security=True;";
-        string connection = "Server = tcp:40.81.22.197,1433;Database=MoiveRentalManagmentSystem; User Id=sa; Password=VV1234v;";
+        string connectionString = "Data Source=LAPTOP-LGBEJ5GN\\SQLEXPRESS02; Initial Catalog=MoiveRentalManagmentSystem; Integrated Security=True;";
+      //  string connection = "Server = tcp:40.81.22.197,1433;Database=MoiveRentalManagmentSystem; User Id=sa; Password=VV1234v;";
         SqlConnection sqlConnection;
 
 
         public SqlCustomerdbData()
         {
-            sqlConnection = new SqlConnection(connection);
+            sqlConnection = new SqlConnection(connectionString);
         }
 
         public List<Customer> GetCustomers()
         {
-            string selectStatement = "SELECT * FROM Customers";
+            string selectStatement = "SELECT * FROM Customer";
             SqlCommand selectCommand = new SqlCommand(selectStatement, sqlConnection);
             sqlConnection.Open();
             List<Customer> customers = new List<Customer>();
@@ -54,7 +54,7 @@ namespace MRMS_Data
         {
             int success;
 
-            string insertStatement = "INSERT INTO Customers (Username, Password) VALUES (@Username, @Password)";
+            string insertStatement = "INSERT INTO Customer (Username, Password) VALUES (@Username, @Password)";
             SqlCommand insertCommand = new SqlCommand(insertStatement, sqlConnection);
 
             insertCommand.Parameters.AddWithValue("@Username", username);
@@ -68,7 +68,7 @@ namespace MRMS_Data
             return success;
         }
 
-       
+     
 
 
 

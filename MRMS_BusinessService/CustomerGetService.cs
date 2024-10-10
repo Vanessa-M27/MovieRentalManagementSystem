@@ -1,10 +1,12 @@
-﻿using MRMS_Data;
+﻿using MimeKit;
+using MRMS_Data;
 using MRMS_Model;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace MRMS_BusinessService
 {
@@ -35,14 +37,17 @@ namespace MRMS_BusinessService
             }
 
             return null;
+
         }
 
         public int AddCustomer(string Username, string Password)
         {
             return customerData.AddCustomer(Username, Password);
         }
-     
 
+     
+                
+            
 
 
 

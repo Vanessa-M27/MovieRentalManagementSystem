@@ -15,6 +15,7 @@ namespace MRMS_API
             builder.Services.AddScoped<CustomerGetService>();
             builder.Services.AddScoped<MovieService>();
             builder.Services.AddScoped<SqlCustomerdbData>();
+            builder.Services.AddScoped<Email>();
 
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
